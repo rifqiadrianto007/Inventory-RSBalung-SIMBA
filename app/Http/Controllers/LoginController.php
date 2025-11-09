@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('V_HalLogin');
+        return view('login');
     }
 
     public function autentikasi(Request $request)

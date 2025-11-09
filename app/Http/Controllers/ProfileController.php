@@ -11,13 +11,13 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Pengguna::where('id_pengguna', session('id_pengguna'))->first();
-        return view('V_HalProfile', compact('user'));
+        return view('profile', compact('user'));
     }
 
     public function edit()
     {
         $user = Pengguna::find(session('id_pengguna'));
-        return view('V_FormProfile', compact('user'));
+        return view('profile', compact('user'));
     }
 
     public function update(Request $request)
@@ -56,6 +56,6 @@ class ProfileController extends Controller
 
     public function faq()
     {
-        return view('V_FAQ');
+        return view('FAQ');
     }
 }

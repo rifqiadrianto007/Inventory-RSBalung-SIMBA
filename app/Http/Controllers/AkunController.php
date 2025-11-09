@@ -16,12 +16,12 @@ class AkunController extends Controller
         }
 
         $akun = Pengguna::all();
-        return view('V_HalManajemenAkun', compact('akun'));
+        return view('manajemenAkun', compact('akun'));
     }
 
     public function create()
     {
-        return view('V_FormTambahAkun');
+        return view('tambahAkun');
     }
 
     public function store(Request $request)
@@ -53,7 +53,7 @@ class AkunController extends Controller
     public function edit($id)
     {
         $user = Pengguna::findOrFail($id);
-        return view('V_FormTambahAkun', compact('user'));
+        return view('tambahAkun', compact('user'));
     }
 
     public function update(Request $request, $id)
