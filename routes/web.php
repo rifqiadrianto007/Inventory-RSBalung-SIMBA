@@ -44,6 +44,31 @@ Route::middleware(['web', 'auth.session'])->group(function () {
     });
 
 
+    Route::middleware('multirole:admin,admin gudang umum')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->name('dashboard');
+    });
+
+    Route::middleware('multirole:instalasi')->group(function () {
+        Route::get('/pemesanan', function () {
+            return view('pemesanan');
+        })->name('pemesanan.index');
+    });
+
+    Route::middleware('multirole:ppk, teknis')->group(function () {
+        Route::get('/penerimaan', function () {
+            return view('penerimaan');
+        })->name('penerimaan.index');
+    });
+
+    Route::middleware('multirole:penanggung jawab')->group(function () {
+        Route::get('/pengeluaran', function () {
+            return view('pengeluaran');
+        })->name('pengeluaran.index');
+    });
+
+
     // ==========================
     // DASHBOARD PER ROLE
     // ==========================
