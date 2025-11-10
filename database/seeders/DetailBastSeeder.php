@@ -13,13 +13,6 @@ class DetailBastSeeder extends Seeder
             ['Gudang Utama'],
             ['Area Selatan'],
             ['Gudang Timur'],
-            ['Kantor Pusat'],
-            ['Gedung IT'],
-            ['Finance Office'],
-            ['Gudang Utama'],
-            ['Server Room'],
-            ['Gudang Selatan'],
-            ['Gudang Utama'],
         ];
 
         foreach ($data as $i => $item) {

@@ -3,41 +3,57 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\DetailPenerimaan;
 
 class DetailPenerimaanSeeder extends Seeder
 {
     public function run(): void
     {
-        $items = [
-            [1, 50, 15000, true],
-            [2, 100, 25000, true],
-            [3, 10, 80000, true],
-            [4, 30, 50000, true],
-            [5, 40, 120000, true],
-            [6, 2, 2000000, true],
-            [7, 15, 50000, true],
-            [8, 20, 50000, true],
-            [9, 10, 150000, true],
-            [10, 50, 20000, true],
+        $details = [
+            [
+                'id_penerimaan' => 1,
+                'id_stok' => 1,
+                'volume' => 10,
+                'id_satuan' => 1, // misal 'unit'
+                'harga' => 150000,
+                'layak' => true,
+            ],
+            [
+                'id_penerimaan' => 1,
+                'id_stok' => 2,
+                'volume' => 5,
+                'id_satuan' => 1,
+                'harga' => 450000,
+                'layak' => true,
+            ],
+            [
+                'id_penerimaan' => 2,
+                'id_stok' => 3,
+                'volume' => 2,
+                'id_satuan' => 1,
+                'harga' => 2600000,
+                'layak' => true,
+            ],
+            [
+                'id_penerimaan' => 2,
+                'id_stok' => 4,
+                'volume' => 4,
+                'id_satuan' => 2, // misal 'botol'
+                'harga' => 120000,
+                'layak' => true,
+            ],
+            [
+                'id_penerimaan' => 3,
+                'id_stok' => 5,
+                'volume' => 3,
+                'id_satuan' => 1,
+                'harga' => 5800000,
+                'layak' => false,
+            ],
         ];
 
-        foreach ($items as $i) {
-            DB::table('detail_penerimaan')->insert([
-                'id_penerimaan' => $i[0],
-                'id_stok' => $i[0],
-                'volume' => $i[1],
-                'id_satuan' => 1,
-                'harga' => $i[2],
-                'layak' => $i[3],
-            ]);
-
-            // Update total harga
-            DB::table('penerimaan')
-                ->where('id_penerimaan', $i[0])
-                ->update([
-                    'total_harga' => DB::raw($i[1] * $i[2])
-                ]);
+        foreach ($details as $d) {
+            DetailPenerimaan::create($d);
         }
     }
 }
