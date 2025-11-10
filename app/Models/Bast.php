@@ -9,7 +9,12 @@ class Bast extends Model
     protected $table = 'bast';
     protected $primaryKey = 'id_bast';
 
-    protected $fillable = ['nomor_surat','id_penerimaan','deskripsi','file_path'];
+    protected $fillable = [
+        'nomor_surat',
+        'id_penerimaan',
+        'deskripsi',
+        'file_path',
+    ];
 
     public function penerimaan()
     {

@@ -10,13 +10,12 @@ class DetailPenerimaan extends Model
     protected $primaryKey = 'id_detail_penerimaan';
 
     protected $fillable = [
-        'id_penerimaan','id_stok','volume','id_satuan','harga','layak'
-    ];
-
-    protected $casts = [
-        'volume' => 'decimal:2',
-        'harga'  => 'decimal:2',
-        'layak'  => 'boolean',
+        'id_penerimaan',
+        'id_stok',
+        'volume',
+        'id_satuan',
+        'harga',
+        'layak'
     ];
 
     public function penerimaan()

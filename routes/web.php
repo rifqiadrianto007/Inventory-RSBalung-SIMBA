@@ -5,6 +5,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\PenerimaanTeknisController;
+use App\Http\Controllers\PenerimaanPPKController;
+use App\Http\Controllers\PenerimaanGudangController;
 
 // ==============================
 // LOGIN (harus di luar middleware web)
@@ -72,6 +75,40 @@ Route::middleware(['web', 'auth.session'])->group(function () {
             return view('pengeluaran');
         })->name('pengeluaran.index');
     });
+
+// ==========================
+// PENERIMAAN TEKNIS
+// ==========================
+// Route::middleware(['teknis'])->prefix('penerimaan/teknis')->name('teknis.penerimaan.')->group(function () {
+Route::prefix('penerimaan/teknis')->name('teknis.penerimaan.')->group(function () {
+    Route::get('/', [PenerimaanTeknisController::class, 'index'])->name('index');
+    Route::get('/{id}/detail', [PenerimaanTeknisController::class, 'detail'])->name('detail');
+    Route::post('/{id}/update-kelayakan', [PenerimaanTeknisController::class, 'updateKelayakan'])->name('update');
+});
+
+// ==========================
+// PENERIMAAN PPK
+// ==========================
+// Route::middleware(['ppk'])->prefix('penerimaan/ppk')->name('ppk.penerimaan.')->group(function () {
+Route::prefix('penerimaan/ppk')->name('ppk.penerimaan.')->group(function () {
+    Route::get('/', [PenerimaanPPKController::class, 'index'])->name('index');
+    Route::get('/create', [PenerimaanPPKController::class, 'create'])->name('create');
+    Route::post('/store', [PenerimaanPPKController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PenerimaanPPKController::class, 'edit'])->name('edit');
+    Route::put('/{id}/update', [PenerimaanPPKController::class, 'update'])->name('update');
+    Route::delete('/{id}/delete', [PenerimaanPPKController::class, 'destroy'])->name('delete');
+});
+
+// ==========================
+// PENERIMAAN GUDANG
+// ==========================
+// Route::middleware(['admin.gudang'])->prefix('penerimaan/gudang')->name('gudang.penerimaan.')->group(function () {
+Route::prefix('penerimaan/gudang')->name('gudang.penerimaan.')->group(function () {
+    Route::get('/', [PenerimaanGudangController::class, 'index'])->name('index');
+    Route::get('/{id}/upload-bast', [PenerimaanGudangController::class, 'uploadBast'])->name('upload');
+    Route::post('/{id}/store-bast', [PenerimaanGudangController::class, 'storeBast'])->name('storeBast');
+    Route::get('/download/{id}', [PenerimaanGudangController::class, 'downloadBast'])->name('download');
+});
 
 
     // ==========================
