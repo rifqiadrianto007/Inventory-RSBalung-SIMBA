@@ -82,6 +82,12 @@ class AkunController extends Controller
         return redirect()->route('akun.index')->with('success','Akun berhasil diperbarui');
     }
 
+    public function show($id)
+    {
+        $user = Pengguna::findOrFail($id);
+            return view('detailAkun', compact('user'));
+    }
+
     public function destroy($id)
     {
         $user = Pengguna::findOrFail($id);

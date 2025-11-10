@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\MonitoringController;
 
 // ==============================
 // LOGIN (harus di luar middleware web)
@@ -41,6 +42,10 @@ Route::middleware(['web', 'auth.session'])->group(function () {
         Route::get('/{id}/edit', [AkunController::class, 'edit'])->name('akun.edit');
         Route::put('/{id}', [AkunController::class, 'update'])->name('akun.update');
         Route::delete('/{id}', [AkunController::class, 'destroy'])->name('akun.destroy');
+        Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
+        Route::get('/akun/{id}', [AkunController::class, 'show'])->name('akun.show');
+        Route::get('/akun/{id}/monitoring', [MonitoringController::class, 'perUser'])
+            ->name('monitoring.peruser');
     });
 
 
