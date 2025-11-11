@@ -24,12 +24,12 @@ class Penerimaan extends Model
     // Relasi ke Detail Penerimaan
     public function detail()
     {
-        return $this->hasMany(DetailPenerimaan::class, 'id_penerimaan', 'id_penerimaan');
+        return $this->hasMany(DetailPenerimaan::class, 'id_penerimaan');
     }
 
     // Relasi ke BAST
     public function bast()
     {
-        return $this->hasOne(Bast::class, 'id_penerimaan', 'id_penerimaan');
+        return $this->hasOne(Bast::class, 'id_penerimaan');
     }
 }

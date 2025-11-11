@@ -1,5 +1,11 @@
 <h2>Penerimaan - Admin Gudang</h2>
 
+<a href="{{ route('detail.index', $p->id_penerimaan) }}">
+    Lihat Detail Barang
+</a>
+|
+<a href="{{ route('gudang.penerimaan.upload', $p->id_penerimaan) }}">Upload BAST</a>
+
 <table border="1" cellpadding="6">
     <tr>
         <th>ID</th>

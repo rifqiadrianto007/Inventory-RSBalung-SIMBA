@@ -12,9 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            // 'multirole' => \App\Http\Middleware\RoleMiddleware::class,
-            // 'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
-            // 'auth.session' => \App\Http\Middleware\AuthSessionMiddleware::class,
+            'multirole' => \App\Http\Middleware\RoleMiddleware::class,
+            'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+            'teknis' => \App\Http\Middleware\RoleTeknis::class,
+            'ppk' => \App\Http\Middleware\RolePPK::class,
+            'admin.gudang' => \App\Http\Middleware\RoleGudang::class,
+            'auth.session' => \App\Http\Middleware\AuthSessionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

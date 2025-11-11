@@ -23,6 +23,6 @@ class Bast extends Model
 
     public function detail()
     {
-        return $this->hasMany(DetailBast::class, 'id_bast', 'id_bast');
+        return $this->hasMany(DetailBast::class, 'id_bast');
     }
 }

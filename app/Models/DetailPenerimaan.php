@@ -20,7 +20,7 @@ class DetailPenerimaan extends Model
 
     public function penerimaan()
     {
-        return $this->belongsTo(Penerimaan::class, 'id_penerimaan', 'id_penerimaan');
+        return $this->belongsTo(Penerimaan::class, 'id_penerimaan');
     }
 
     public function stok()

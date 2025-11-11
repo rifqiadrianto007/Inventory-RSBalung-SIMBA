@@ -1,25 +1,27 @@
-<h2>Pengecekan Barang - Tim Teknis</h2>
+<h3>Detail Barang yang Diterima</h3>
 
-<p><b>Nama Barang:</b> {{ $penerimaan->nama_barang }}</p>
-<p><b>Jumlah:</b> {{ $penerimaan->jumlah }} {{ $penerimaan->satuan }}</p>
-<p><b>Tanggal:</b> {{ $penerimaan->tanggal_penerimaan }}</p>
+<a href="{{ route('detail.index', $penerimaan->id_penerimaan) }}">
+    Lihat Detail Barang
+</a>
+<br><br>
 
-<form action="{{ route('teknis.penerimaan.update', $penerimaan->id_penerimaan) }}" method="POST">
-    @csrf
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Nama Barang</th>
+        <th>Volume</th>
+        <th>Satuan</th>
+        <th>Harga</th>
+        <th>Layak?</th>
+    </tr>
 
-    <label>Status Kelayakan:</label><br>
-    <select name="status_kelayakan">
-        <option value="layak">Layak</option>
-        <option value="tidak_layak">Tidak Layak</option>
-    </select>
-    <br><br>
+    @foreach($penerimaan->detail as $d)
+    <tr>
+        <td>{{ $d->stok->nama_stok ?? '-' }}</td>
+        <td>{{ $d->volume }}</td>
+        <td>{{ $d->satuan->nama_satuan ?? '-' }}</td>
+        <td>{{ number_format($d->harga) }}</td>
+        <td>{{ $d->layak ? 'Layak' : 'Tidak Layak' }}</td>
+    </tr>
+    @endforeach
 
-    <label>Catatan Teknis:</label><br>
-    <textarea name="catatan" rows="4" cols="40"></textarea>
-
-    <br><br>
-    <button type="submit">Simpan</button>
-</form>
-
-<br>
-<a href="{{ route('teknis.penerimaan.index') }}">Kembali</a>
+</table>
