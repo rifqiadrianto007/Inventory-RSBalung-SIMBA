@@ -6,35 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('penerimaan', function (Blueprint $table) {
             $table->id('id_penerimaan');
-            $table->string('nomor_po')->nullable();
-            $table->string('nama_barang');
-            $table->integer('jumlah');
-            $table->string('satuan');
+
+            // data dari PPK
             $table->date('tanggal_penerimaan');
             $table->string('supplier')->nullable();
-
-             // untuk teknis
-            $table->enum('status_kelayakan', ['layak', 'tidak_layak', 'belum_dicek'])
-                ->default('belum_dicek');
             $table->text('catatan')->nullable();
 
-            // untuk admin gudang
-            $table->string('file_bast')->nullable();
+            // status utama alur
+            $table->enum('status', [
+                'draft_ppk',          // PPK membuat daftar barang
+                'cek_teknis',         // teknis sedang memeriksa kelayakan item
+                'siap_gudang',        // teknis selesai → menunggu gudang upload BAST
+                'selesai'             // BAST sudah diupload, stok bertambah
+            ])->default('draft_ppk');
+
+            // status teknis
+            $table->enum('status_kelayakan', [
+                'belum_dicek',
+                'layak',
+                'tidak_layak'
+            ])->default('belum_dicek');
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('penerimaan');

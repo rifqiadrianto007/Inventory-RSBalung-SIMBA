@@ -8,154 +8,131 @@ use Illuminate\Http\Request;
 class PenerimaanPPKController extends Controller
 {
     /**
-     * LIST SEMUA PENERIMAAN UNTUK PPK
+     * ✅ LIST DATA PENERIMAAN (hanya draft PPK)
      */
     public function index()
     {
-        // ✅ PPK hanya bisa melihat penerimaan yang sudah diperiksa teknis
-        $data = Penerimaan::with('detail')
-            ->where('status_kelayakan', '!=', 'belum_dicek')
-            ->orderBy('id_penerimaan', 'desc')
-            ->get();
+        $data = Penerimaan::orderBy('id_penerimaan', 'DESC')->get();
 
         return view('penerimaan.ppk.index', compact('data'));
     }
 
-
     /**
-     * FORM MEMBUAT PO (BERDASARKAN 1 ID PENERIMAAN)
+     * ✅ FORM TAMBAH PENERIMAAN BARU
      */
-    public function create($id)
+    public function create()
     {
-        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
-
-        // ✅ Tidak boleh jika teknis belum selesai
-        if ($penerimaan->status_kelayakan === 'belum_dicek') {
-            return back()->with('warning', 'Belum bisa membuat PO: Barang belum diperiksa Teknis.');
-        }
-
-        // ✅ Tidak boleh jika detail barang masih kosong
-        if ($penerimaan->detail->count() === 0) {
-            return back()->with('warning', 'Detail barang masih kosong. Tambahkan detail barang terlebih dahulu.');
-        }
-
-        // ✅ Tidak boleh jika PO sudah ada
-        if ($penerimaan->nomor_po !== null) {
-            return back()->with('warning', 'PO sudah dibuat untuk penerimaan ini.');
-        }
-
-        return view('penerimaan.ppk.create', compact('penerimaan'));
+        return view('penerimaan.ppk.create');
     }
 
-
     /**
-     * SIMPAN DATA PO
+     * ✅ SIMPAN PENERIMAAN BARU
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
-        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
-
-        // ✅ Pastikan detail barang tidak kosong
-        if ($penerimaan->detail->count() === 0) {
-            return back()->with('warning', 'Detail barang masih kosong. Tidak bisa membuat PO.');
-        }
-
-        // ✅ Validasi input
         $request->validate([
-            'nomor_po' => 'required',
-            'supplier' => 'nullable|string',
             'tanggal_penerimaan' => 'required|date',
+            'supplier' => 'nullable|string',
+            'catatan' => 'nullable|string',
         ]);
 
-        // ✅ Cek duplikasi nomor PO
-        $cek = Penerimaan::where('nomor_po', $request->nomor_po)
-            ->where('id_penerimaan', '!=', $id)
-            ->exists();
-
-        if ($cek) {
-            return back()->with('warning', 'Nomor PO sudah digunakan pada penerimaan lain.');
-        }
-
-        // ✅ Update data PO
-        $penerimaan->update([
-            'nomor_po' => $request->nomor_po,
-            'supplier' => $request->supplier,
+        Penerimaan::create([
             'tanggal_penerimaan' => $request->tanggal_penerimaan,
+            'supplier' => $request->supplier,
+            'catatan' => $request->catatan,
+            'status' => 'draft_ppk',          // PPK membuat draft
+            'status_kelayakan' => 'belum_dicek',
         ]);
 
-        return redirect()
-            ->route('ppk.penerimaan.index')
-            ->with('success', 'PO berhasil dibuat.');
+        return redirect()->route('ppk.penerimaan.index')
+            ->with('success', 'Penerimaan berhasil dibuat. Tambahkan detail barang.');
     }
 
-
     /**
-     * FORM EDIT PO
+     * ✅ FORM EDIT HEADER
      */
     public function edit($id)
     {
         $penerimaan = Penerimaan::findOrFail($id);
 
-        if ($penerimaan->nomor_po === null) {
-            return back()->with('warning', 'PO belum dibuat.');
+        if ($penerimaan->status !== 'draft_ppk') {
+            return back()->with('warning', 'Tidak dapat mengedit. Barang sudah dikirim ke teknis.');
         }
 
         return view('penerimaan.ppk.edit', compact('penerimaan'));
     }
 
-
     /**
-     * UPDATE PO
+     * ✅ UPDATE HEADER PENERIMAAN
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'tanggal_penerimaan' => 'required|date',
+            'supplier' => 'nullable|string',
+            'catatan' => 'nullable|string',
+        ]);
+
         $penerimaan = Penerimaan::findOrFail($id);
 
-        $request->validate([
-            'nomor_po' => 'required',
-            'supplier' => 'nullable|string',
-            'tanggal_penerimaan' => 'required|date',
-        ]);
-
-        // ✅ Cegah duplikasi nomor PO
-        $cek = Penerimaan::where('nomor_po', $request->nomor_po)
-            ->where('id_penerimaan', '!=', $id)
-            ->exists();
-
-        if ($cek) {
-            return back()->with('warning', 'Nomor PO sudah digunakan pada penerimaan lain.');
+        if ($penerimaan->status !== 'draft_ppk') {
+            return back()->with('warning', 'Tidak dapat mengedit. Barang sudah dikirim ke teknis.');
         }
 
-        // ✅ Update data PO
         $penerimaan->update([
-            'nomor_po' => $request->nomor_po,
-            'supplier' => $request->supplier,
             'tanggal_penerimaan' => $request->tanggal_penerimaan,
+            'supplier' => $request->supplier,
+            'catatan' => $request->catatan,
         ]);
 
-        return redirect()
-            ->route('ppk.penerimaan.index')
-            ->with('success', 'PO berhasil diperbarui.');
+        return redirect()->route('ppk.penerimaan.index')
+            ->with('success', 'Penerimaan berhasil diperbarui.');
     }
 
-
     /**
-     * HAPUS PO (OPSIONAL SESUAI UML)
+     * ✅ HAPUS PENERIMAAN (jika belum dicek + belum ada detail)
      */
     public function destroy($id)
     {
-        $penerimaan = Penerimaan::findOrFail($id);
+        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
 
-        // Tidak bisa hapus kalau sudah diverifikasi gudang
-        if ($penerimaan->bast()->exists()) {
-            return back()->with('warning', 'Tidak dapat menghapus PO karena BAST sudah diupload.');
+        if ($penerimaan->status !== 'draft_ppk') {
+            return back()->with('warning', 'Tidak dapat menghapus. Penerimaan sudah dikirim ke teknis.');
         }
 
+        if ($penerimaan->detail->count() > 0) {
+            return back()->with('warning', 'Tidak dapat menghapus karena sudah ada detail barang.');
+        }
+
+        $penerimaan->delete();
+
+        return back()->with('success', 'Penerimaan berhasil dihapus.');
+    }
+
+    /**
+     * ✅ SUBMIT KE TEKNIS
+     * PPK mengirim penerimaan ke teknis untuk diperiksa
+     */
+    public function submitToTeknis($id)
+    {
+        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
+
+        // Tidak bisa submit jika tidak ada detail
+        if ($penerimaan->detail->count() === 0) {
+            return back()->with('warning', 'Tidak dapat mengirim ke teknis. Tambahkan detail barang terlebih dahulu.');
+        }
+
+        // Tidak bisa submit dua kali
+        if ($penerimaan->status !== 'draft_ppk') {
+            return back()->with('warning', 'Penerimaan sudah dikirim ke teknis sebelumnya.');
+        }
+
+        // Update status ke teknis
         $penerimaan->update([
-            'nomor_po' => null,
-            'supplier' => null,
+            'status' => 'cek_teknis',
         ]);
 
-        return back()->with('success', 'PO berhasil dihapus.');
+        return redirect()->route('ppk.penerimaan.index')
+            ->with('success', 'Data berhasil dikirim ke Tim Teknis.');
     }
 }

@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('detail_penerimaan', function (Blueprint $table) {
@@ -15,6 +16,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_satuan');
             $table->decimal('harga', 12, 2)->default(0);
             $table->boolean('layak')->default(true);
+
             $table->timestamps();
 
             $table->foreign('id_penerimaan')->references('id_penerimaan')->on('penerimaan');

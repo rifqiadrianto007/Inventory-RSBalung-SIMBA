@@ -78,6 +78,22 @@ Route::middleware(['web', 'auth.session'])->group(function () {
     });
 
 // ==========================
+// PENERIMAAN PPK
+// ==========================
+Route::middleware(['ppk'])->prefix('penerimaan/ppk')->name('ppk.penerimaan.')->group(function () {
+// Route::prefix('penerimaan/ppk')->name('ppk.penerimaan.')->group(function () {
+    Route::get('/', [PenerimaanPPKController::class, 'index'])->name('index');
+    Route::get('/create', [PenerimaanPPKController::class, 'create'])->name('create');
+    Route::post('/store', [PenerimaanPPKController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PenerimaanPPKController::class, 'edit'])->name('edit');
+    Route::put('/{id}/update', [PenerimaanPPKController::class, 'update'])->name('update');
+    Route::delete('/{id}/delete', [PenerimaanPPKController::class, 'destroy'])->name('delete');
+
+    // SUBMIT KE TEKNIS
+    Route::post('/{id}/submit', [PenerimaanPPKController::class, 'submitToTeknis'])->name('submit');
+});
+
+// ==========================
 // PENERIMAAN TEKNIS
 // ==========================
 Route::middleware(['teknis'])->prefix('penerimaan/teknis')->name('teknis.penerimaan.')->group(function () {
@@ -85,19 +101,6 @@ Route::middleware(['teknis'])->prefix('penerimaan/teknis')->name('teknis.penerim
     Route::get('/', [PenerimaanTeknisController::class, 'index'])->name('index');
     Route::get('/{id}/detail', [PenerimaanTeknisController::class, 'detail'])->name('detail');
     Route::post('/{id}/update-kelayakan', [PenerimaanTeknisController::class, 'updateKelayakan'])->name('update');
-});
-
-// ==========================
-// PENERIMAAN PPK
-// ==========================
-Route::middleware(['ppk'])->prefix('penerimaan/ppk')->name('ppk.penerimaan.')->group(function () {
-// Route::prefix('penerimaan/ppk')->name('ppk.penerimaan.')->group(function () {
-    Route::get('/', [PenerimaanPPKController::class, 'index'])->name('index');
-    Route::get('/{id}/create', [PenerimaanPPKController::class, 'create'])->name('create');
-    Route::post('/{id}/store', [PenerimaanPPKController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [PenerimaanPPKController::class, 'edit'])->name('edit');
-    Route::put('/{id}/update', [PenerimaanPPKController::class, 'update'])->name('update');
-    Route::delete('/{id}/delete', [PenerimaanPPKController::class, 'destroy'])->name('delete');
 });
 
 // ==========================

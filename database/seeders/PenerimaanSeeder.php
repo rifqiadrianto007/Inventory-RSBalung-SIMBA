@@ -11,30 +11,24 @@ class PenerimaanSeeder extends Seeder
     {
         $data = [
             [
-                'nomor_po' => 'PO-001',
-                'nama_barang' => 'Kursi Lipat',
-                'jumlah' => 10,
-                'satuan' => 'unit',
                 'tanggal_penerimaan' => '2025-11-04',
                 'supplier' => 'PT Maju Jaya',
+                'catatan' => 'Pengadaan perlengkapan kantor',
+                'status' => 'draft_ppk',
                 'status_kelayakan' => 'belum_dicek',
             ],
             [
-                'nomor_po' => 'PO-002',
-                'nama_barang' => 'Peralatan Printer',
-                'jumlah' => 6,
-                'satuan' => 'paket',
                 'tanggal_penerimaan' => '2025-11-05',
                 'supplier' => 'PT Mega Printindo',
+                'catatan' => 'Pengadaan printer & tinta',
+                'status' => 'draft_ppk',
                 'status_kelayakan' => 'belum_dicek',
             ],
             [
-                'nomor_po' => 'PO-003',
-                'nama_barang' => 'Komputer & Periferal',
-                'jumlah' => 3,
-                'satuan' => 'unit',
                 'tanggal_penerimaan' => '2025-11-07',
                 'supplier' => 'CV Teknologi Nusantara',
+                'catatan' => 'Pengadaan komputer dan periferal',
+                'status' => 'draft_ppk',
                 'status_kelayakan' => 'belum_dicek',
             ],
         ];
