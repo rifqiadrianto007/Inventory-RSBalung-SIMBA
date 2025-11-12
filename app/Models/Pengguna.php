@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Pengguna extends Model
 {
+    use HasApiTokens, HasFactory, Notifiable;
+
     protected $table = 'pengguna';
     protected $primaryKey = 'id_pengguna';
     public $timestamps = true;
@@ -37,5 +42,15 @@ class Pengguna extends Model
     public function logAktivitas()
     {
         return $this->hasMany(LogAktivitas::class, 'id_sso', 'id_sso');
+    }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
+    public function getDisplayNameAttribute()
+    {
+        return ucfirst($this->nama_pengguna);
     }
 }

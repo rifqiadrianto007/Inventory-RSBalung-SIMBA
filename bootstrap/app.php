@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
@@ -18,6 +19,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'ppk' => \App\Http\Middleware\RolePPK::class,
             'admin.gudang' => \App\Http\Middleware\RoleGudang::class,
             'auth.session' => \App\Http\Middleware\AuthSessionMiddleware::class,
+
+            // API Middleware
+            'api' => [
+                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+                'throttle:api',
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ],
+
+            'role.api' => \App\Http\Middleware\RoleApiMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
