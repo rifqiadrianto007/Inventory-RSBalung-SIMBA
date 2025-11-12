@@ -15,11 +15,6 @@ class PegawaiSeeder extends Seeder
             [3,'Siti Aisyah','1987654323',3,'81345678901','active'],
             [4,'Dian Rahma','1987654324',4,'81367890123','inactive'],
             [5,'Rudi Hartono','1987654325',5,'81389012345','active'],
-            [6,'Putri Melati','1987654326',6,'81354321098','active'],
-            [7,'Rahmat Hidayat','1987654327',7,'81345987654','active'],
-            [8,'Nurhaliza','1987654328',8,'81398765432','active'],
-            [9,'Andi Pratama','1987654329',9,'81312345678','active'],
-            [10,'Dewi Anggraini','1987654330',10,'81356789012','active'],
         ];
 
         foreach ($data as $p) {
