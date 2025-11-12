@@ -9,124 +9,93 @@ use Illuminate\Http\Request;
 
 class PenerimaanGudangController extends Controller
 {
+    /**
+     * Daftar penerimaan untuk Admin Gudang
+     */
     public function index()
     {
-        $data = Penerimaan::where('status_kelayakan', '!=', 'belum_dicek')
+        $data = Penerimaan::where('status_kelayakan', 'layak')
             ->orderBy('id_penerimaan', 'desc')
             ->get();
 
         return view('penerimaan.gudang.index', compact('data'));
     }
 
+    /**
+     * ADMIN GUDANG DOWNLOAD BAST DRAFT
+     */
+    public function downloadDraft($id)
+    {
+        $p = Penerimaan::with('detail')->findOrFail($id);
+
+        // Generate PDF draft otomatis
+        $html = view('penerimaan.gudang.bast_draft_pdf', compact('p'))->render();
+
+        $pdfName = "BAST-DRAFT-{$p->id_penerimaan}.pdf";
+
+        return response()->streamDownload(function () use ($html) {
+            echo $html;
+        }, $pdfName);
+    }
 
     /**
-     * FORM UPLOAD BAST
+     * FORM UPLOAD BAST FINAL (Sudah ditandatangani)
      */
-    public function uploadBast($id)
+    public function uploadFinal($id)
     {
-        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
+        $penerimaan = Penerimaan::findOrFail($id);
 
-        // ✅ 1. Belum dicek teknis
-        if ($penerimaan->status_kelayakan == 'belum_dicek') {
-            return back()->with('warning', 'Barang belum diperiksa Teknisi.');
-        }
-
-        // ✅ 2. Ada item tidak layak
-        foreach ($penerimaan->detail as $d) {
-            if ($d->layak == false) {
-                return back()->with('warning', 'Terdapat item tidak layak. Tidak dapat membuka halaman upload BAST.');
-            }
-        }
-
-        // ✅ 3. PPK belum membuat PO
-        if ($penerimaan->nomor_po == null) {
-            return back()->with('warning', 'PPK belum membuat PO.');
-        }
-
-        // ✅ 4. BAST sudah ada
-        if ($penerimaan->bast()->exists()) {
-            return back()->with('warning', 'BAST sudah diupload sebelumnya.');
+        if ($penerimaan->file_bast !== null) {
+            return back()->with('warning', 'BAST sudah diupload.');
         }
 
         return view('penerimaan.gudang.upload_bast', compact('penerimaan'));
     }
 
-
     /**
-     * SIMPAN BAST + UPDATE STOK + FINALISASI PENERIMAAN
+     * SIMPAN BAST FINAL + UPDATE STOK
      */
-    public function storeBast(Request $request, $id)
+    public function storeFinal(Request $request, $id)
     {
         $penerimaan = Penerimaan::with('detail')->findOrFail($id);
 
-        // ✅ 1. Jangan izinkan upload jika ada item tidak layak
-        foreach ($penerimaan->detail as $d) {
-            if ($d->layak == false) {
-                return back()->with('warning', 'Masih ada item tidak layak, BAST tidak dapat diupload.');
-            }
-        }
-
-        // ✅ 2. Validasi
         $request->validate([
-            'nomor_surat' => 'required',
-            'deskripsi' => 'required',
-            'file_bast' => 'nullable|file|mimes:pdf',
+            'file_bast' => 'required|file|mimes:pdf',
         ]);
 
-        // ✅ 3. Upload file BAST
-        $path = null;
-        if ($request->hasFile('file_bast')) {
-            $path = $request->file_bast->store('bast', 'public');
-        }
+        // Simpan file
+        $path = $request->file('file_bast')->store('bast', 'public');
 
-        // ✅ 4. Simpan data BAST
-        Bast::create([
-            'nomor_surat' => $request->nomor_surat,
-            'id_penerimaan' => $id,
-            'deskripsi' => $request->deskripsi,
-            'file_path' => $path,
+        // Simpan ke tabel BAST
+        $penerimaan->update([
+            'file_bast' => $path,
         ]);
 
-        // ✅ 5. UPDATE STOK OTOMATIS
-        foreach ($penerimaan->detail as $item) {
+        // ✅ UPDATE STOK (PAKAI total_stok)
+        foreach ($penerimaan->detail as $d) {
+            $stok = $d->stok;
 
-            $stok = $item->stok;   // relasi stok dari model DetailPenerimaan
-
-            if (!$stok) {
-                continue; // jika stok tidak ditemukan, skip
+            if ($stok) {
+                $stok->total_stok = $stok->total_stok + $d->volume;
+                $stok->save();
             }
-
-            // Update jumlah stok
-            $stok->jumlah = $stok->jumlah + $item->volume;
-
-            // Pastikan tidak negatif
-            if ($stok->jumlah < 0) {
-                $stok->jumlah = 0;
-            }
-
-            $stok->save();
         }
-
-        // ✅ 6. FINALISASI STATUS PENERIMAAN
-        $penerimaan->status = 'selesai';
-        $penerimaan->save();
 
         return redirect()->route('gudang.penerimaan.index')
-            ->with('success', 'BAST berhasil disimpan dan stok berhasil diperbarui.');
+            ->with('success', 'BAST final berhasil diupload dan stok diperbarui.');
     }
 
-
     /**
-     * DOWNLOAD BAST
+     * DOWNLOAD BAST FINAL
      */
-    public function downloadBast($id)
+    public function downloadFinal($id)
     {
-        $bast = Bast::findOrFail($id);
+        $p = Penerimaan::findOrFail($id);
 
-        if (!$bast->file_path || !file_exists(storage_path("app/public/" . $bast->file_path))) {
-            return back()->with('warning', 'File BAST tidak ditemukan.');
+        if (!$p->file_bast) {
+            return back()->with('warning', 'BAST final belum diupload.');
         }
 
-        return response()->download(storage_path("app/public/" . $bast->file_path));
+        return response()->download(storage_path("app/public/" . $p->file_bast));
     }
 }

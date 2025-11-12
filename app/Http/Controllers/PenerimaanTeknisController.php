@@ -3,53 +3,88 @@
 namespace App\Http\Controllers;
 
 use App\Models\Penerimaan;
+use App\Models\DetailPenerimaan;
 use Illuminate\Http\Request;
 
 class PenerimaanTeknisController extends Controller
 {
+    /**
+     * ✅ 1. LIST PENERIMAAN YANG PERLU DICEK TEKNIS
+     */
     public function index()
     {
-        // Hanya tampilkan barang yang butuh dicek teknis
-        $data = Penerimaan::orderBy('tanggal_penerimaan', 'desc')->get();
+        $data = Penerimaan::where('status', 'cek_teknis')
+            ->orderBy('id_penerimaan', 'DESC')
+            ->get();
 
         return view('penerimaan.teknis.index', compact('data'));
     }
 
+    /**
+     * ✅ 2. DETAIL PENERIMAAN + LIST BARANG
+     */
     public function detail($id)
     {
-        $penerimaan = Penerimaan::findOrFail($id);
+        $penerimaan = Penerimaan::with('detail.stok', 'detail.satuan')
+            ->findOrFail($id);
 
-        // Jika barang sudah dicek, jangan biarkan teknis buka halaman ini lagi
-        if ($penerimaan->status_kelayakan !== 'belum_dicek') {
-            return redirect()->route('teknis.penerimaan.index')
-                ->with('warning', 'Barang ini sudah diperiksa sebelumnya.');
+        if ($penerimaan->status !== 'cek_teknis') {
+            return back()->with('warning', 'Barang ini belum masuk tahap pemeriksaan teknis.');
         }
 
         return view('penerimaan.teknis.detail', compact('penerimaan'));
     }
 
-    public function updateKelayakan(Request $request, $id)
+    /**
+     * ✅ 3. UPDATE KELAYAKAN PER ITEM DETAIL
+     */
+    public function updateKelayakan(Request $request, $id_detail)
     {
+        $detail = DetailPenerimaan::with('penerimaan')->findOrFail($id_detail);
+        $penerimaan = $detail->penerimaan;
+
+        if ($penerimaan->status !== 'cek_teknis') {
+            return back()->with('warning', 'Pemeriksaan teknis sudah selesai. Tidak dapat mengubah kelayakan.');
+        }
+
         $request->validate([
-            'status_kelayakan' => 'required|in:layak,tidak_layak',
-            'catatan' => 'nullable|string',
+            'layak' => 'required|boolean',
         ]);
 
-        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
-        $penerimaan->status_kelayakan = $request->status_kelayakan;
-        $penerimaan->catatan = $request->catatan;
-        $penerimaan->save();
+        $detail->layak = $request->layak;
+        $detail->save();
 
-        // ✅ Jika teknis menetapkan "tidak layak", maka semua item → tidak layak
-        if ($request->status_kelayakan == 'tidak_layak') {
-            foreach ($penerimaan->detail as $d) {
-                $d->layak = false;
-                $d->save();
+        return back()->with('success', 'Status kelayakan berhasil diperbarui.');
+    }
+
+    /**
+     * ✅ 4. FINALISASI TEKNIS → LANJUT KE ADMIN GUDANG
+     * Hanya bisa dilakukan jika semua item diberi status kelayakan
+     */
+    public function submitToGudang($id)
+    {
+        $penerimaan = Penerimaan::with('detail')->findOrFail($id);
+
+        if ($penerimaan->status !== 'cek_teknis') {
+            return back()->with('warning', 'Pemeriksaan teknis belum dimulai.');
+        }
+
+        // ✅ Pastikan semua detail sudah dicek
+        foreach ($penerimaan->detail as $d) {
+            if ($d->layak === null) {
+                return back()->with('warning', 'Masih ada barang yang belum diperiksa.');
             }
         }
 
-        return redirect()->route('teknis.penerimaan.index')
-            ->with('success', 'Pengecekan teknis berhasil disimpan.');
-    }
+        // ✅ Tentukan status_kelayakan penerimaan
+        $allLayak = $penerimaan->detail->every(fn($d) => $d->layak === 1);
 
+        $penerimaan->update([
+            'status_kelayakan' => $allLayak ? 'layak' : 'tidak_layak',
+            'status' => 'siap_gudang',
+        ]);
+
+        return redirect()->route('teknis.penerimaan.index')
+            ->with('success', 'Pemeriksaan teknis selesai dan diteruskan ke Admin Gudang.');
+    }
 }

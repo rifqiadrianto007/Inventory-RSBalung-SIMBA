@@ -1,18 +1,13 @@
-<h2>Buat Draft Penerimaan</h2>
+<h2>Buat Penerimaan Baru</h2>
 
-<form method="POST" action="{{ route('ppk.penerimaan.store') }}">
-  @csrf
-  <label>Tanggal Penerimaan</label><br>
-  <input type="date" name="tanggal_penerimaan" required><br><br>
+<form action="{{ route('ppk.penerimaan.store') }}" method="POST">
+    @csrf
 
-  <label>Supplier</label><br>
-  <input type="text" name="supplier"><br><br>
+    <label>Nama Penerimaan:</label><br>
+    <input type="text" name="nama_penerimaan" required><br><br>
 
-  <label>Catatan</label><br>
-  <textarea name="catatan"></textarea><br><br>
+    <label>Tanggal Penerimaan:</label><br>
+    <input type="date" name="tanggal_penerimaan" required><br><br>
 
-  <button type="submit">Simpan</button>
+    <button type="submit">Simpan</button>
 </form>
-
-<br>
-<a href="{{ route('ppk.penerimaan.index') }}">Kembali</a>

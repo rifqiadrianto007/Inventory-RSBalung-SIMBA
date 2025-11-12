@@ -100,7 +100,10 @@ Route::middleware(['teknis'])->prefix('penerimaan/teknis')->name('teknis.penerim
 // Route::prefix('penerimaan/teknis')->name('teknis.penerimaan.')->group(function () {
     Route::get('/', [PenerimaanTeknisController::class, 'index'])->name('index');
     Route::get('/{id}/detail', [PenerimaanTeknisController::class, 'detail'])->name('detail');
-    Route::post('/{id}/update-kelayakan', [PenerimaanTeknisController::class, 'updateKelayakan'])->name('update');
+    Route::post('/detail/{id_detail}/kelayakan', [PenerimaanTeknisController::class, 'updateKelayakan'])->name('updateKelayakan');
+
+    // SUBMIT KE GUDANG
+    Route::post('/{id}/submit', [PenerimaanTeknisController::class, 'submitToGudang'])->name('submitToGudang');
 });
 
 // ==========================
@@ -109,9 +112,13 @@ Route::middleware(['teknis'])->prefix('penerimaan/teknis')->name('teknis.penerim
 Route::middleware(['admin.gudang'])->prefix('penerimaan/gudang')->name('gudang.penerimaan.')->group(function () {
 // Route::prefix('penerimaan/gudang')->name('gudang.penerimaan.')->group(function () {
     Route::get('/', [PenerimaanGudangController::class, 'index'])->name('index');
-    Route::get('/{id}/upload-bast', [PenerimaanGudangController::class, 'uploadBast'])->name('upload');
-    Route::post('/{id}/store-bast', [PenerimaanGudangController::class, 'storeBast'])->name('storeBast');
-    Route::get('/download/{id}', [PenerimaanGudangController::class, 'downloadBast'])->name('download');
+    // Download draft
+    Route::get('/{id}/draft', [PenerimaanGudangController::class, 'downloadDraft'])->name('draft');
+    // Upload Final
+    Route::get('/{id}/upload-final', [PenerimaanGudangController::class, 'uploadFinal'])->name('upload');
+    Route::post('/{id}/store-final', [PenerimaanGudangController::class, 'storeFinal'])->name('storeFinal');
+    // Download final
+    Route::get('/{id}/download', [PenerimaanGudangController::class, 'downloadFinal'])->name('download');
 });
 
 // ==========================

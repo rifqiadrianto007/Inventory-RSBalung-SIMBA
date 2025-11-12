@@ -1,52 +1,22 @@
-<h2>Upload BAST</h2>
+<h2>Upload BAST - Admin Gudang</h2>
 
-<p><b>ID Penerimaan:</b> {{ $penerimaan->id_penerimaan }}</p>
-<p><b>Nomor PO:</b> {{ $penerimaan->nomor_po }}</p>
-<p><b>Status Kelayakan:</b> {{ $penerimaan->status_kelayakan }}</p>
+<div style="max-width: 700px; margin: 40px auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #f9f9f9;">
+    <h2 style="text-align: center;">Upload BAST Final</h2>
+    <p style="text-align: center;">Unggah file BAST yang telah ditandatangani.</p>
 
-<hr>
+    <hr>
 
-<h3>Rincian Barang</h3>
+    <form action="{{ route('gudang.penerimaan.storeFinal', $penerimaan->id_penerimaan) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div style="margin-bottom: 15px;">
+            <label for="file_bast"><b>File BAST (PDF)</b></label><br>
+            <input type="file" name="file_bast" accept="application/pdf" required style="width:100%; padding:8px;">
+        </div>
 
-<table border="1" cellpadding="6">
-    <tr>
-        <th>Nama Barang</th>
-        <th>Volume</th>
-        <th>Satuan</th>
-        <th>Harga</th>
-    </tr>
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px;">
+            Upload BAST Final
+        </button>
 
-    @foreach ($penerimaan->detail as $d)
-    <tr>
-        <td>{{ $d->stok->nama_stok }}</td>
-        <td>{{ $d->volume }}</td>
-        <td>{{ $d->satuan->nama_satuan }}</td>
-        <td>{{ number_format($d->harga) }}</td>
-    </tr>
-    @endforeach
-</table>
-
-<hr><br>
-
-<form action="{{ route('gudang.penerimaan.storeBast', $penerimaan->id_penerimaan) }}"
-      method="POST" enctype="multipart/form-data">
-
-    @csrf
-
-    <label>Nomor Surat BAST:</label><br>
-    <input type="text" name="nomor_surat" required>
-    <br><br>
-
-    <label>Deskripsi:</label><br>
-    <textarea name="deskripsi" required></textarea>
-    <br><br>
-
-    <label>File BAST (PDF):</label><br>
-    <input type="file" name="file_bast" accept="application/pdf">
-    <br><br>
-
-    <button type="submit">Upload BAST</button>
-</form>
-
-<br>
-<a href="javascript:history.back()">Kembali</a>
+        <a href="{{ route('gudang.penerimaan.index') }}" style="margin-left: 10px;">Batal</a>
+    </form>
+</div>

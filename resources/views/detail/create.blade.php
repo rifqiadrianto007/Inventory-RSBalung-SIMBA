@@ -1,34 +1,28 @@
 <h2>Tambah Detail Barang</h2>
 
-<form action="{{ route('detail.store', $id) }}" method="POST">
+<form action="{{ route('detail.store', $penerimaan->id_penerimaan) }}" method="POST">
     @csrf
 
-    <label>Nama Barang:</label><br>
-    <select name="id_stok">
-        @foreach ($stok as $s)
+    <label>Pilih Barang:</label><br>
+    <select name="id_stok" required>
+        <option value="">-- pilih --</option>
+        @foreach($stok as $s)
             <option value="{{ $s->id_stok }}">{{ $s->nama_stok }}</option>
         @endforeach
-    </select>
-    <br><br>
+    </select><br><br>
 
     <label>Volume:</label><br>
-    <input type="number" name="volume" step="0.01">
-    <br><br>
+    <input type="number" name="volume" required><br><br>
 
     <label>Satuan:</label><br>
-    <select name="id_satuan">
-        @foreach ($satuan as $st)
-            <option value="{{ $st->id_satuan }}">{{ $st->nama_satuan }}</option>
+    <select name="id_satuan" required>
+        @foreach($satuan as $s)
+            <option value="{{ $s->id_satuan }}">{{ $s->nama_satuan }}</option>
         @endforeach
-    </select>
-    <br><br>
+    </select><br><br>
 
-    <label>Harga Barang:</label><br>
-    <input type="number" name="harga" step="0.01">
-    <br><br>
+    <label>Harga:</label><br>
+    <input type="number" name="harga"><br><br>
 
     <button type="submit">Simpan</button>
 </form>
-
-<br>
-<a href="javascript:history.back()">Kembali</a>
