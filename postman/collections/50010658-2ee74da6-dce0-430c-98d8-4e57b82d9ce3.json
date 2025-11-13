@@ -1,0 +1,611 @@
+{
+	"info": {
+		"_postman_id": "50010658-2ee74da6-dce0-430c-98d8-4e57b82d9ce3",
+		"name": "SIMBA-InventoryRSBalung",
+		"description": "Complete Postman collection for Inventory API (Sprint 1). Contains Auth, Akun, Monitoring, Penerimaan, BAST endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth - Login",
+			"id": "50010658-3c320b25-f054-4568-9cef-a85a4dbaadc8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"superadmin\",\n  \"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				},
+				"description": "Login returns token in data.token"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Logout",
+			"id": "50010658-26401a90-71d6-4764-a95e-547edc2ebc1e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Akun - Get All",
+			"id": "50010658-28f15ca9-c99d-439d-88c7-ca3dee34ecc8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/akun",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"akun"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Akun - Get One",
+			"id": "50010658-9b60f8b3-23dc-48e2-8b3a-9d837827c073",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/akun/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"akun",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Akun - Create",
+			"id": "50010658-bf3da57e-fcbe-40e4-8778-d9b5deecc255",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nama_pengguna\": \"ppk_user\",\n  \"email\": \"ppk@example.com\",\n  \"role\": \"ppk\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/akun",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"akun"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Akun - Update",
+			"id": "50010658-bbfb43a5-91e9-40a4-ad6c-e7824006655d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"updated@example.com\",\n  \"role\": \"ppk\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/akun/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"akun",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Akun - Delete",
+			"id": "50010658-3836c02e-59e2-4cb8-86c6-8258c2d2afbd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/akun/5",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"akun",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Monitoring - All",
+			"id": "50010658-121df621-86e1-426b-acaa-4cd8f31fa035",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/monitoring",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"monitoring"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Monitoring - User",
+			"id": "50010658-2861b351-f274-47e1-a612-208c695c83cb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/monitoring/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"monitoring",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Penerimaan - Get All",
+			"id": "50010658-74a2fdc8-474d-4b20-830b-e9d7dad983c5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Penerimaan - Get One",
+			"id": "50010658-3c98b550-b90f-4c81-956e-6e8b152a32b9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Penerimaan - Create (PPK)",
+			"id": "50010658-800d5713-5f15-4e6c-903b-16ebc80e16ed",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nomor_po\": \"PO-010\",\n  \"nama_barang\": \"Kursi Lipat\",\n  \"jumlah\": 10,\n  \"satuan\": \"unit\",\n  \"tanggal_penerimaan\": \"2025-11-12\",\n  \"supplier\": \"PT Contoh\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Penerimaan - Update (PPK/Teknis)",
+			"id": "50010658-4efc43de-5eed-4c61-928f-d0f4e754ba10",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"status_kelayakan\": \"layak\",\n  \"catatan\": \"Semua baik\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Penerimaan - Delete (PPK)",
+			"id": "50010658-2cc3ad68-3a15-4916-8cad-3a2b1d694a55",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan/3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BAST - Upload (Admin Gudang) - form-data",
+			"id": "50010658-bde6a6d5-393c-4a7c-8652-fb59b69560bb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file_bast",
+							"type": "file",
+							"value": ""
+						},
+						{
+							"key": "nomor_surat",
+							"type": "text",
+							"value": "BAST-001"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan/1/upload-bast",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan",
+						"1",
+						"upload-bast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BAST - Download (Admin Gudang)",
+			"id": "50010658-a1715e3b-3663-40d8-b6ab-43edb120497e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan/1/download-bast",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan",
+						"1",
+						"download-bast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Penerimaan - Details (via web detail routes) - Get",
+			"id": "50010658-77a2d1fd-c7c4-4319-9542-e8b6c7eea367",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/penerimaan/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"penerimaan",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
