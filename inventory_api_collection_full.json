@@ -1,0 +1,526 @@
+{
+  "info": {
+    "name": "Inventory API - Full Collection",
+    "description": "Complete Postman collection for Inventory API (Sprint 1). Contains Auth, Akun, Monitoring, Penerimaan, BAST endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"superadmin\",\n  \"password\": \"password\"\n}"
+        },
+        "description": "Login returns token in data.token"
+      }
+    },
+    {
+      "name": "Auth - Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/logout",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "logout"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Akun - Get All",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/akun",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "akun"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Akun - Get One",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/akun/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "akun",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Akun - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/akun",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "akun"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nama_pengguna\": \"ppk_user\",\n  \"email\": \"ppk@example.com\",\n  \"role\": \"ppk\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Akun - Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/akun/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "akun",
+            "1"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"updated@example.com\",\n  \"role\": \"ppk\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Akun - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/akun/5",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "akun",
+            "5"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Monitoring - All",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/monitoring",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "monitoring"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Monitoring - User",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/monitoring/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "monitoring",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Penerimaan - Get All",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Penerimaan - Get One",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Penerimaan - Create (PPK)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nomor_po\": \"PO-010\",\n  \"nama_barang\": \"Kursi Lipat\",\n  \"jumlah\": 10,\n  \"satuan\": \"unit\",\n  \"tanggal_penerimaan\": \"2025-11-12\",\n  \"supplier\": \"PT Contoh\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Penerimaan - Update (PPK/Teknis)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan",
+            "1"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status_kelayakan\": \"layak\",\n  \"catatan\": \"Semua baik\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Penerimaan - Delete (PPK)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan/3",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan",
+            "3"
+          ]
+        }
+      }
+    },
+    {
+      "name": "BAST - Upload (Admin Gudang) - form-data",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan/1/upload-bast",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan",
+            "1",
+            "upload-bast"
+          ]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file_bast",
+              "type": "file",
+              "src": ""
+            },
+            {
+              "key": "nomor_surat",
+              "type": "text",
+              "value": "BAST-001"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "BAST - Download (Admin Gudang)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan/1/download-bast",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan",
+            "1",
+            "download-bast"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Penerimaan - Details (via web detail routes) - Get",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/penerimaan/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "penerimaan",
+            "1"
+          ]
+        }
+      }
+    }
+  ]
+}
