@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengguna;
 use Illuminate\Support\Facades\Hash;
+use App\Traits\ApiResponse;
 
 class AuthController extends Controller
 {
+    use ApiResponse;
+    
     public function login(Request $request)
     {
         $request->validate([

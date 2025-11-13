@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengguna;
 use App\Models\LogAktivitas;
+use App\Traits\ApiResponse;
 
 class AkunApiController extends Controller
 {
+    use ApiResponse;
+
     // ✅ Ambil semua akun
     public function index()
     {
-        return response()->json(Pengguna::all());
+        return $this->success(Pengguna::all(), 'Daftar akun berhasil diambil');
     }
 
     // ✅ Detail akun

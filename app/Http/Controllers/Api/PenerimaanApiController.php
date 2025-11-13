@@ -4,22 +4,24 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Penerimaan;
-use App\Models\DetailPenerimaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\ApiResponse; // ⬅️ tambahkan
 
 class PenerimaanApiController extends Controller
 {
+    use ApiResponse; // ⬅️ aktifkan trait
+
     public function index()
     {
         $data = Penerimaan::with('detail')->get();
-        return response()->json($data);
+        return $this->success($data, 'Daftar penerimaan berhasil diambil');
     }
 
     public function show($id)
     {
         $p = Penerimaan::with('detail')->findOrFail($id);
-        return response()->json($p);
+        return $this->success($p, 'Detail penerimaan ditemukan');
     }
 
     public function store(Request $request)
@@ -31,21 +33,21 @@ class PenerimaanApiController extends Controller
         ]);
 
         $data = Penerimaan::create($request->all());
-        return response()->json(['message' => 'Penerimaan dibuat', 'data' => $data], 201);
+        return $this->success($data, 'Penerimaan berhasil dibuat', 201);
     }
 
     public function update(Request $request, $id)
     {
         $p = Penerimaan::findOrFail($id);
         $p->update($request->all());
-        return response()->json(['message' => 'Penerimaan diperbarui', 'data' => $p]);
+        return $this->success($p, 'Penerimaan berhasil diperbarui');
     }
 
     public function destroy($id)
     {
         $p = Penerimaan::findOrFail($id);
         $p->delete();
-        return response()->json(['message' => 'Penerimaan dihapus']);
+        return $this->success(null, 'Penerimaan berhasil dihapus');
     }
 
     public function uploadBast(Request $request, $id)
@@ -56,7 +58,7 @@ class PenerimaanApiController extends Controller
         $path = $request->file('file_bast')->store('bast', 'public');
         $p->update(['file_bast' => $path]);
 
-        return response()->json(['message' => 'BAST berhasil diupload', 'file_path' => $path]);
+        return $this->success(['file_path' => $path], 'BAST berhasil diupload');
     }
 
     public function downloadBast($id)
@@ -64,7 +66,7 @@ class PenerimaanApiController extends Controller
         $p = Penerimaan::findOrFail($id);
 
         if (!$p->file_bast || !Storage::exists('public/'.$p->file_bast)) {
-            return response()->json(['message' => 'File tidak ditemukan'], 404);
+            return $this->error('File tidak ditemukan', 404);
         }
 
         return response()->download(storage_path('app/public/'.$p->file_bast));
