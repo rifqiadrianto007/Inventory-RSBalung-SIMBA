@@ -96,12 +96,6 @@ Inventory-RSBalung-SIMBA/
 ├── package.json
 ├── README.md
 └── ...
-```
-
-## 🗺️ Roadmap
-- **Planned Features:** [List of planned features]
-- **Known Issues:** [List of known issues]
-- **Future Improvements:** [List of future improvements]
 
 ---
 
