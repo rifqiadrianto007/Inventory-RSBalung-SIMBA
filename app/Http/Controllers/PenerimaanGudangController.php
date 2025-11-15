@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Penerimaan;
 use App\Models\DetailPenerimaan;
 use App\Models\Bast;
+use App\Models\Stok;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 
 class PenerimaanGudangController extends Controller
@@ -71,7 +73,7 @@ class PenerimaanGudangController extends Controller
             'file_bast' => $path,
         ]);
 
-        // ✅ UPDATE STOK (PAKAI total_stok)
+        // UPDATE STOK (PAKAI total_stok)
         foreach ($penerimaan->detail as $d) {
             $stok = $d->stok;
 
@@ -83,6 +85,14 @@ class PenerimaanGudangController extends Controller
 
         return redirect()->route('gudang.penerimaan.index')
             ->with('success', 'BAST final berhasil diupload dan stok diperbarui.');
+
+        // notifikasi untuk admin
+        Notifikasi::create([
+            'judul'=>'BAST final diupload',
+            'pesan'=>'BAST untuk penerimaan #'.$penerimaan->id_penerimaan.'telah diupload dan stok diperbarui.',
+            'link'=>'/penerimaan/'.$penerimaan->id_penerimaan
+        ]);
+
     }
 
     /**
